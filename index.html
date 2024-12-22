@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Générateur de mot de passe</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f9;
+        }
+
+        .container {
+            background: #fff;
+            padding: 20px 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: #333;
+        }
+
+        .password-display {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 18px;
+            background: #f0f0f0;
+            padding: 10px;
+            margin: 20px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            word-break: break-all;
+        }
+
+        .controls {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        label {
+            font-size: 14px;
+            color: #555;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        .options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: space-between;
+        }
+
+        .options label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 14px;
+        }
+
+        button {
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Générateur de mot de passe</h1>
+        <div class="password-display" id="passwordDisplay">Votre mot de passe s'affichera ici</div>
+        <div class="controls">
+            <label for="length">Longueur du mot de passe :</label>
+            <input type="number" id="length" name="length" min="6" max="128" placeholder="8" required>
+            <div class="options">
+                <label><input type="checkbox" id="includeUppercase"> Lettres majuscules</label>
+                <label><input type="checkbox" id="includeLowercase"> Lettres minuscules</label>
+                <label><input type="checkbox" id="includeNumbers"> Chiffres</label>
+                <label><input type="checkbox" id="includeSymbols"> Symboles</label>
+            </div>
+            <button id="generateButton">Générer</button>
+        </div>
+    </div>
+    <script>
+        const generateButton = document.getElementById('generateButton');
+        const lengthInput = document.getElementById('length');
+        const includeUppercase = document.getElementById('includeUppercase');
+        const includeLowercase = document.getElementById('includeLowercase');
+        const includeNumbers = document.getElementById('includeNumbers');
+        const includeSymbols = document.getElementById('includeSymbols');
+        const passwordDisplay = document.getElementById('passwordDisplay');
+
+        const upperCaseChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        const lowerCaseChars = 'abcdefghijklmnopqrstuvwxyz';
+        const numberChars = '0123456789';
+        const symbolChars = '!@#$%^&*()-_=+[]{}|;:,.<>?';
+
+        generateButton.addEventListener('click', function() {
+            const length = parseInt(lengthInput.value);
+            if (isNaN(length) || length < 6 || length > 128) {
+                alert('La longueur doit être un nombre entre 6 et 128.');
+                return;
+            }
+
+            let charSet = '';
+            if (includeUppercase.checked) charSet += upperCaseChars;
+            if (includeLowercase.checked) charSet += lowerCaseChars;
+            if (includeNumbers.checked) charSet += numberChars;
+            if (includeSymbols.checked) charSet += symbolChars;
+
+            if (charSet === '') {
+                alert('Veuillez sélectionner au moins une option de type de caractère.');
+                return;
+            }
+
+            let password = '';
+            for (let i = 0; i < length; i++) {
+                const randomIndex = Math.floor(Math.random() * charSet.length);
+                password += charSet[randomIndex];
+            }
+
+            passwordDisplay.textContent = password;
+        });
+    </script>
+</body>
+</html>
